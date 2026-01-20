@@ -1,8 +1,34 @@
 body {
-    background-color: #ffffff;
-    
+    background-image: url(/images/fundosite.png);
+    background-size: cover;      /* cobre toda a tela */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed; /* opcional */
+    padding-top: 56px; /* altura da navbar */
+    min-height: 100vh;
 }
 
 h3 {
     color: rgb(0, 0, 0);
+}
+
+.hero {
+    display: flex;
+    min-height: calc(100vh - 56px); /* desconta a navbar */
+}
+
+.hero-left {
+    width: 60%;
+    padding: 60px;
+}
+
+.hero-right {
+    width: 40%;
+    background-image: url(/images/fotologin.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.navbar {
+    transition: background-color 0.3s ease;
 }
