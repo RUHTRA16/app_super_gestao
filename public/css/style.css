@@ -17,11 +17,6 @@ h3 {
     min-height: calc(100vh - 56px); /* desconta a navbar */
 }
 
-.hero-left {
-    width: 60%;
-    padding: 60px;
-}
-
 .hero-right {
     width: 40%;
     background-image: url(/images/fotologin.png);
@@ -32,3 +27,145 @@ h3 {
 .navbar {
     transition: background-color 0.3s ease;
 }
+
+/* ---------- LOGIN PAGE ---------- */
+.login-page {
+  min-height: 100vh;
+  margin: 0;
+  background: #0b0b0b;
+}
+
+/* Fundo com blur */
+.login-bg {
+  position: fixed;
+  inset: 0;
+  background-image: url('/images/fundosite.png'); /* troque se quiser */
+  background-size: cover;
+  background-position: center;
+  filter: blur(10px);
+  transform: scale(1.08);
+  z-index: -2;
+}
+
+/* Overlay escuro */
+.login-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Centralização */
+.login-wrap {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Card */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  border-radius: 18px;
+}
+
+/* Ajuste do botão do olho */
+.input-group .btn {
+  border-left: 0;
+}
+
+/* Botão X do login */
+.login-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #555;
+  text-decoration: none;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.login-close:hover {
+  background-color: #f1f1f1;
+  color: #000;
+}
+
+/* Seção de apresentação */
+.apresentacao{
+  max-width: 620px;
+}
+
+/* Badge */
+.badge-cns{
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.2px;
+
+  background: rgba(34, 32, 32, 0.75);
+  border: 1px solid rgba(0,0,0,0.08);
+  backdrop-filter: blur(6px);
+}
+
+/* Título */
+.titulo-cns{
+  margin-top: 16px;
+  margin-bottom: 10px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #111;
+}
+
+.titulo-cns span{
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+/* Texto */
+.texto-cns{
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(0,0,0,0.75);
+}
+
+/* Botões */
+.botoes-cns{
+  margin-top: 18px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Melhorar contraste se o fundo estiver forte */
+.hero-left{
+  background: rgba(255,255,255,0.55);
+  padding: 60px;
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(0,0,0,0.08);
+  color: white;
+  width: 60%;
+}
+
+/* Responsivo */
+@media (max-width: 768px){
+  .hero-left{
+    padding: 36px;
+  }
+  .texto-cns{
+    font-size: 1rem;
+  }
+}
+
+.botoes-cns .btn-outline-dark{
+  border-width: 2px;
+}
+

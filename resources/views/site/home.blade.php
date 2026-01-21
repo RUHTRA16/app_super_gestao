@@ -47,8 +47,22 @@
     
 <div class="hero">
   <div class="hero-left">
-    <h1>Bem-vindo ao CNS Libras</h1>
-    <p>Conteúdo do site aqui</p>
+    <section class="apresentacao">
+  <span class="badge-cns">Acessibilidade • Inclusão • Libras</span>
+
+  <h1 class="titulo-cns">Bem-vindo ao <span>CNS – Libras</span></h1>
+
+  <p class="texto-cns">
+    O CNS – Libras nasce com o propósito de promover acessibilidade, inclusão e comunicação sem barreiras,
+    conectando pessoas por meio da Língua Brasileira de Sinais.
+  </p>
+
+  <div class="botoes-cns">
+    <a href="/cadastro" class="btn btn-dark">Começar agora</a>
+    <a href="/sobreNos" class="btn btn-outline-dark">Saiba mais</a>
+  </div>
+</section>
+
   </div>
 
    <div class="hero-right"></div>

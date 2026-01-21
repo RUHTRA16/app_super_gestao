@@ -7,6 +7,8 @@ Route::get('/', [\App\Http\Controllers\home_controller::class, 'home'])->name('P
 Route::get('/sobreNos', [\App\Http\Controllers\SobreNosController::class, 'sobreNos'])->name('Sobre-Nós');
 Route::get('/contato', [\App\Http\Controllers\ContatoController::class, 'contato'])->name('Contato');
 Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login'])->name('Login');
+Route::get('/cadastro', [\App\Http\Controllers\CadastroController::class, 'cadastro'])->name('Cadastro');
+Route::get('/esquecisenha', [\App\Http\Controllers\EsqueciSenhaController::class, 'esquecisenha'])->name('EsqueciSenha');
 
 Route::prefix('/app')->group(function(){
     Route::get('/fornecedores', function(){return 'fornecedores';})->name('app.fornecedores');

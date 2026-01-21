@@ -47,9 +47,10 @@
     
 <div class="hero">
   <div class="hero-left">
-    <h1>Bem-vindo ao CNS Libras</h1>
+    <h1>Bem-vindo ao CNS Libras!</h1>
     <p>Conteúdo do site aqui</p>
   </div>
+
 
 
 <!--BOOTSTRAP-->
