@@ -80,7 +80,7 @@
               <label class="form-check-label" for="remember">Lembrar</label>
             </div>
 
-            <a href="/esquecisenha" class="text-decoration-none">
+            <a href="{{ route('password.request') }}" class="text-decoration-none">
               Esqueci a senha
             </a>
           </div>
