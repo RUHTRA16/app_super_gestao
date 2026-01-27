@@ -28,18 +28,15 @@ Route::get('/home', fn () => redirect()->route('dashboard'));
 */
 Route::middleware('guest')->group(function () {
 
-    // ✅ Rota "login" obrigatória pro middleware auth do Laravel
-    // Ela pode simplesmente mostrar sua mesma tela de login
     Route::get('/login', [tela_LoginController::class, 'tela_Login'])->name('login');
-
-    // Sua rota antiga (mantida para não quebrar links)
     Route::get('/tela_login', [tela_LoginController::class, 'tela_Login'])->name('Login');
 
-    Route::get('/cadastro', [\App\Http\Controllers\CadastroController::class, 'cadastro'])->name('register');
+    // Cadastro (tela + ação)
+    Route::get('/cadastro', [CadastroController::class, 'cadastro'])->name('register');
+    Route::post('/register', [CadastroController::class, 'store'])->name('register.post');
 
-    // Ações (POST)
+    // Login (ação)
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-    Route::post('/cadastro', [AuthController::class, 'register'])->name('register.post');
 
     // Esqueci a senha / reset
     Route::get('/esqueci_senha', [PasswordResetController::class, 'showForgot'])->name('password.request');
@@ -69,9 +66,11 @@ Route::get('/dashboard', function () {
 |--------------------------------------------------------------------------
 */
 Route::prefix('/app')->middleware('auth')->group(function () {
-    Route::get('/fornecedores', fn () => 'fornecedores')->name('app.fornecedores');
-    Route::get('/clientes', fn () => 'clientes')->name('app.clientes');
-    Route::get('/produtos', fn () => 'produtos')->name('app.produtos');
+    Route::get('/dashboard', fn () => view('app.dashboard'))->name('app.dashboard');
+
+    Route::get('/alunos', fn () => view('app.alunos.index'))->name('app.alunos.index');
+    Route::get('/notas', fn () => view('app.notas.index'))->name('app.notas.index');
+    Route::get('/chamadas', fn () => view('app.chamadas.index'))->name('app.chamadas.index');
 });
 
 /*
