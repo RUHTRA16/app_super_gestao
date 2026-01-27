@@ -2,34 +2,83 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\home_controller;
+use App\Http\Controllers\SobreNosController;
+use App\Http\Controllers\ContatoController;
+use App\Http\Controllers\tela_LoginController;
+use App\Http\Controllers\CadastroController;
 
-Route::get('/', [\App\Http\Controllers\home_controller::class, 'home'])->name('Página_Inicial');
-Route::get('/sobreNos', [\App\Http\Controllers\SobreNosController::class, 'sobreNos'])->name('Sobre-Nós');
-Route::get('/contato', [\App\Http\Controllers\ContatoController::class, 'contato'])->name('Contato');
-Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login'])->name('Login');
-Route::get('/cadastro', [\App\Http\Controllers\CadastroController::class, 'cadastro'])->name('Cadastro');
+use App\Http\Controllers\AuthController; // controller que vai ter login/register/logout
+use App\Http\Controllers\Auth\PasswordResetController;
 
-Route::get('/esqueci_senha', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showForgot'])->name('password.request');
-Route::post('/esqueci_senha', [\App\Http\Controllers\Auth\PasswordResetController::class, 'sendResetLink']);
+/*
+|--------------------------------------------------------------------------
+| Site (público)
+|--------------------------------------------------------------------------
+*/
+Route::get('/', [home_controller::class, 'home'])->name('Página_Inicial');
+Route::get('/sobreNos', [SobreNosController::class, 'sobreNos'])->name('Sobre-Nós');
+Route::get('/contato', [ContatoController::class, 'contato'])->name('Contato');
+Route::get('/home', fn () => redirect()->route('dashboard'));
 
-Route::get('/reset-senha/{token}', [\App\Http\Controllers\Auth\PasswordResetController::class, 'showReset'])->name('password.reset');
-Route::post('/reset-senha', [\App\Http\Controllers\Auth\PasswordResetController::class, 'reset']);
+/*
+|--------------------------------------------------------------------------
+| Autenticação (telas + ações)
+|--------------------------------------------------------------------------
+*/
+Route::middleware('guest')->group(function () {
 
+    // ✅ Rota "login" obrigatória pro middleware auth do Laravel
+    // Ela pode simplesmente mostrar sua mesma tela de login
+    Route::get('/login', [tela_LoginController::class, 'tela_Login'])->name('login');
 
-Route::prefix('/app')->group(function(){
-    Route::get('/fornecedores', function(){return 'fornecedores';})->name('app.fornecedores');
-    Route::get('/clientes', function(){return 'clientes';})->name('app.clientes');
-    Route::get('/produtos', function(){return 'produtos';})->name('app.produtos');
+    // Sua rota antiga (mantida para não quebrar links)
+    Route::get('/tela_login', [tela_LoginController::class, 'tela_Login'])->name('Login');
+
+    Route::get('/cadastro', [\App\Http\Controllers\CadastroController::class, 'cadastro'])->name('register');
+
+    // Ações (POST)
+    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+    Route::post('/cadastro', [AuthController::class, 'register'])->name('register.post');
+
+    // Esqueci a senha / reset
+    Route::get('/esqueci_senha', [PasswordResetController::class, 'showForgot'])->name('password.request');
+    Route::post('/esqueci_senha', [PasswordResetController::class, 'sendResetLink'])->name('password.email');
+
+    Route::get('/reset-senha/{token}', [PasswordResetController::class, 'showReset'])->name('password.reset');
+    Route::post('/reset-senha', [PasswordResetController::class, 'reset'])->name('password.update');
 });
 
-Route::get('/teste/{p1}/{p2}', [\App\Http\Controllers\TesteController::class, 'teste'])->name('teste');
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])
+    ->middleware('auth')
+    ->name('logout');
 
-/*Route::get('/rota2', function(){
-    return redirect()->route('site.rota1');
-})->name('site.rota2');*/
+/*
+|--------------------------------------------------------------------------
+| Dashboard (protegido)
+|--------------------------------------------------------------------------
+*/
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware('auth')->name('dashboard');
 
-//Route::redirect('/rota2','/rota1');
+/*
+|--------------------------------------------------------------------------
+| App (protegido)
+|--------------------------------------------------------------------------
+*/
+Route::prefix('/app')->middleware('auth')->group(function () {
+    Route::get('/fornecedores', fn () => 'fornecedores')->name('app.fornecedores');
+    Route::get('/clientes', fn () => 'clientes')->name('app.clientes');
+    Route::get('/produtos', fn () => 'produtos')->name('app.produtos');
+});
 
-Route::fallback(function(){
-    echo 'A rota acessada não existe. <a href="'.route('Página_Inicial').'">Clique aqui</a> para ir para a página inicial';
+/*
+|--------------------------------------------------------------------------
+| Fallback
+|--------------------------------------------------------------------------
+*/
+Route::fallback(function () {
+    echo 'A rota acessada não existe. <a href="' . route('Página_Inicial') . '">Clique aqui</a> para ir para a página inicial';
 });

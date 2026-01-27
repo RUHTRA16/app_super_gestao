@@ -34,8 +34,8 @@
         </li>
       </ul>
       <div class="ms-auto">
-        <a href="/login" class="btn btn-outline-light">
-          Entrar
+       <a href="{{ auth()->check() ? route('dashboard') : route('login') }}" class="btn       btn-outline-light">
+        Entrar
         </a>
       </div>
     </div>
@@ -58,7 +58,9 @@
   </p>
 
   <div class="botoes-cns">
-    <a href="/cadastro" class="btn btn-dark">Começar agora</a>
+    <a href="{{ auth()->check() ? route('dashboard') : route('register') }}" class="btn btn-dark">
+      Começar agora
+    </a>
     <a href="/sobreNos" class="btn btn-outline-dark">Saiba mais</a>
   </div>
 </section>

@@ -40,29 +40,48 @@
         </div>
 
         <!-- Formulário -->
-        <form method="POST" action="/cadastro">
+        <form method="POST" action="{{ route('register.post') }}">
           @csrf
+
+          {{-- Mensagens de erro --}}
+          @if ($errors->any())
+            <div class="alert alert-danger">
+              <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+                @endforeach
+              </ul>
+            </div>
+          @endif
 
           <!-- Nome -->
           <div class="mb-3">
             <label for="name" class="form-label">Nome</label>
             <input type="text"
-                   class="form-control"
-                   id="name"
-                   name="name"
-                   placeholder="Seu nome completo"
-                   required>
+                  class="form-control @error('name') is-invalid @enderror"
+                  id="name"
+                  name="name"
+                  value="{{ old('name') }}"
+                  placeholder="Seu nome completo"
+                  required>
+            @error('name')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
           </div>
 
           <!-- Email -->
           <div class="mb-3">
             <label for="email" class="form-label">E-mail</label>
             <input type="email"
-                   class="form-control"
-                   id="email"
-                   name="email"
-                   placeholder="seuemail@exemplo.com"
-                   required>
+                  class="form-control @error('email') is-invalid @enderror"
+                  id="email"
+                  name="email"
+                  value="{{ old('email') }}"
+                  placeholder="seuemail@exemplo.com"
+                  required>
+            @error('email')
+              <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
           </div>
 
           <!-- Senha -->
@@ -70,19 +89,20 @@
             <label for="password" class="form-label">Senha</label>
             <div class="input-group">
               <input type="password"
-                     class="form-control"
-                     id="password"
-                     name="password"
-                     placeholder="Crie uma senha"
-                     required>
+                    class="form-control @error('password') is-invalid @enderror"
+                    id="password"
+                    name="password"
+                    placeholder="Crie uma senha"
+                    required>
 
-              <button class="btn btn-outline-secondary"
-                      type="button"
-                      id="togglePassword">
+              <button class="btn btn-outline-secondary" type="button" id="togglePassword">
                 <i class="bi bi-eye"></i>
               </button>
             </div>
-            <small class="text-muted">Use pelo menos 6 caracteres.</small>
+            @error('password')
+              <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
+            <small class="text-muted">Use pelo menos 8 caracteres.</small>
           </div>
 
           <!-- Confirmar Senha -->
@@ -90,15 +110,13 @@
             <label for="password_confirmation" class="form-label">Confirmar senha</label>
             <div class="input-group">
               <input type="password"
-                     class="form-control"
-                     id="password_confirmation"
-                     name="password_confirmation"
-                     placeholder="Repita a senha"
-                     required>
+                    class="form-control"
+                    id="password_confirmation"
+                    name="password_confirmation"
+                    placeholder="Repita a senha"
+                    required>
 
-              <button class="btn btn-outline-secondary"
-                      type="button"
-                      id="togglePasswordConfirm">
+              <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirm">
                 <i class="bi bi-eye"></i>
               </button>
             </div>
@@ -106,10 +124,19 @@
 
           <!-- Termos -->
           <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="terms" required>
+            <input class="form-check-input @error('terms') is-invalid @enderror"
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  value="1"
+                  {{ old('terms') ? 'checked' : '' }}
+                  required>
             <label class="form-check-label" for="terms">
               Concordo com os termos de uso
             </label>
+            @error('terms')
+              <div class="invalid-feedback d-block">{{ $message }}</div>
+            @enderror
           </div>
 
           <!-- Botão -->
@@ -120,7 +147,7 @@
           <!-- Já tem conta -->
           <div class="text-center mt-3">
             <span class="text-muted">Já tem conta?</span>
-            <a href="/login" class="text-decoration-none fw-semibold">
+            <a href="{{ route('login') }}" class="text-decoration-none fw-semibold">
               Entrar
             </a>
           </div>
