@@ -10,6 +10,8 @@
     </button>
 
     <div class="collapse navbar-collapse" id="appNavbar">
+
+      <!-- MENU ESQUERDA -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
         <li class="nav-item">
@@ -19,41 +21,62 @@
           </a>
         </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('app.alunos.*') ? 'active' : '' }}"
-             href="{{ route('app.alunos.index') }}">
-            <i class="bi bi-people-fill me-1"></i> Alunos
-          </a>
-        </li>
+        {{-- ===== MENU SOMENTE PARA ADMIN ===== --}}
+        @if(auth()->user()->role === 'admin')
 
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('app.notas.*') ? 'active' : '' }}"
-             href="{{ route('app.notas.index') }}">
-            <i class="bi bi-journal-check me-1"></i> Notas
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('app.alunos.*') ? 'active' : '' }}"
+               href="{{ route('app.alunos.index') }}">
+              <i class="bi bi-people-fill me-1"></i> Alunos
+            </a>
+          </li>
 
-        <li class="nav-item">
-          <a class="nav-link {{ request()->routeIs('app.chamadas.*') ? 'active' : '' }}"
-             href="{{ route('app.chamadas.index') }}">
-            <i class="bi bi-clipboard-check me-1"></i> Chamadas
-          </a>
-        </li>
+          <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('app.matriculas.*') ? 'active' : '' }}"
+               href="{{ route('app.matriculas.index') }}">
+              <i class="bi bi-person-lines-fill me-1"></i> Matrículas
+            </a>
+          </li>
+
+        @endif
+
+        {{-- ===== MENU SOMENTE PARA ALUNO ===== --}}
+        @if(auth()->user()->role === 'student')
+
+          <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('app.aluno.notas') ? 'active' : '' }}"
+               href="{{ route('app.aluno.notas') }}">
+              <i class="bi bi-journal-check me-1"></i> Minhas Notas
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('app.aluno.chamadas') ? 'active' : '' }}"
+               href="{{ route('app.aluno.chamadas') }}">
+              <i class="bi bi-clipboard-check me-1"></i> Minhas Chamadas
+            </a>
+          </li>
+
+        @endif
 
       </ul>
 
+      <!-- MENU DIREITA -->
       <ul class="navbar-nav ms-auto">
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
             <i class="bi bi-person-circle me-1"></i> {{ auth()->user()->name }}
           </a>
+
           <ul class="dropdown-menu dropdown-menu-end">
             <li>
               <a class="dropdown-item" href="{{ route('Página_Inicial') }}">
                 <i class="bi bi-house-door me-2"></i> Página inicial
               </a>
             </li>
+
             <li><hr class="dropdown-divider"></li>
+
             <li>
               <form method="POST" action="{{ route('logout') }}" class="px-3">
                 @csrf

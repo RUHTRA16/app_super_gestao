@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Student;
 
 class AuthController extends Controller
 {
@@ -38,9 +39,17 @@ class AuthController extends Controller
         ]);
 
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
-            'password' => Hash::make($data['password']),
+        'name'     => $data['name'],
+        'email'    => $data['email'],
+        'password' => Hash::make($data['password']),
+        'role'     => 'student', // garante que é aluno
+        ]);
+
+        Student::create([
+        'user_id' => $user->id,
+        'name'    => $user->name,
+        'email'   => $user->email,
+        'active'  => true,
         ]);
 
         Auth::login($user);

@@ -8,8 +8,11 @@ use App\Http\Controllers\ContatoController;
 use App\Http\Controllers\tela_LoginController;
 use App\Http\Controllers\CadastroController;
 
-use App\Http\Controllers\AuthController; // controller que vai ter login/register/logout
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Auth\PasswordResetController;
+
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\EnrollmentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,7 +22,6 @@ use App\Http\Controllers\Auth\PasswordResetController;
 Route::get('/', [home_controller::class, 'home'])->name('Página_Inicial');
 Route::get('/sobreNos', [SobreNosController::class, 'sobreNos'])->name('Sobre-Nós');
 Route::get('/contato', [ContatoController::class, 'contato'])->name('Contato');
-Route::get('/home', fn () => redirect()->route('dashboard'));
 
 /*
 |--------------------------------------------------------------------------
@@ -53,24 +55,46 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| Dashboard (protegido)
+| Dashboard geral
 |--------------------------------------------------------------------------
+| Se você quiser, pode mandar tudo pro /app/dashboard
 */
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware('auth')->name('dashboard');
+Route::get('/dashboard', fn () => redirect()->route('app.dashboard'))
+    ->middleware('auth')
+    ->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
-| App (protegido)
+| App (protegido) - ÁREA LOGADA
 |--------------------------------------------------------------------------
 */
 Route::prefix('/app')->middleware('auth')->group(function () {
+
+    // Dashboard (serve pra admin e aluno)
     Route::get('/dashboard', fn () => view('app.dashboard'))->name('app.dashboard');
 
-    Route::get('/alunos', fn () => view('app.alunos.index'))->name('app.alunos.index');
-    Route::get('/notas', fn () => view('app.notas.index'))->name('app.notas.index');
-    Route::get('/chamadas', fn () => view('app.chamadas.index'))->name('app.chamadas.index');
+    // Telas que o ALUNO pode ver
+    Route::get('/minhas-notas', fn () => view('app.aluno.notas'))->name('app.aluno.notas');
+    Route::get('/minhas-chamadas', fn () => view('app.aluno.chamadas'))->name('app.aluno.chamadas');
+
+    // Telas de ADMIN (professor)
+    Route::middleware('admin')->group(function () {
+
+        // Alunos (CRUD)
+        Route::get('/alunos', [StudentController::class, 'index'])->name('app.alunos.index');
+        Route::post('/alunos', [StudentController::class, 'store'])->name('app.alunos.store');
+        Route::put('/alunos/{student}', [StudentController::class, 'update'])->name('app.alunos.update');
+        Route::delete('/alunos/{student}', [StudentController::class, 'destroy'])->name('app.alunos.destroy');
+
+        // Matrículas
+        Route::get('/matriculas', [EnrollmentController::class, 'index'])->name('app.matriculas.index');
+        Route::post('/matriculas', [EnrollmentController::class, 'store'])->name('app.matriculas.store');
+        Route::delete('/matriculas/{enrollment}', [EnrollmentController::class, 'destroy'])->name('app.matriculas.destroy');
+
+        // (opcional) telas admin antigas
+        Route::get('/notas', fn () => view('app.notas.index'))->name('app.notas.index');
+        Route::get('/chamadas', fn () => view('app.chamadas.index'))->name('app.chamadas.index');
+    });
 });
 
 /*
